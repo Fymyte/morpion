@@ -2,15 +2,20 @@
 
 void print_table(char table[3][3])
 {
-    for (int i = 0; i < 3; i++)
-    {
-        printf("|");
-        for (int j = 0; j < 3; j++)
-        {
-            printf(" %c |", table[i][j]);
-        }
-        printf("\n");
-    }
+    printf("          Y    \n");
+    printf("      0   1   2\n");
+    printf("  0 | %c | %c | %c |\n", table[0][0], table[0][1], table[0][2]);
+    printf("X 1 | %c | %c | %c |\n", table[1][0], table[1][1], table[1][2]);
+    printf("  2 | %c | %c | %c |\n", table[2][0], table[2][1], table[2][2]);
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     printf("|");
+    //     for (int j = 0; j < 3; j++)
+    //     {
+    //         printf(" %c |", table[i][j]);
+    //     }
+    //     printf("\n");
+    // }
 }
 
 int check_availability(char table[3][3], int x, int y)
@@ -32,10 +37,10 @@ int check_win_rec(char table[3][3], char c, int dir, int x, int y)
 {
     if (x < 0 || y < 0 || x > 2 || y > 2 || table[x][y] != c)
         return 0;
-    if (dir == 1 || dir == 2)
-        x++;
-    if (dir == 2 || dir == 3 || dir == 4)
+    if (dir == 1 || dir == 2 || dir == 4)
         y++;
+    if (dir == 2 || dir == 3)
+        x++;
     if (dir == 4)
         x--;
     return 1 + check_win_rec(table, c, dir, x, y);
@@ -44,21 +49,29 @@ int check_win_rec(char table[3][3], char c, int dir, int x, int y)
 int check_win(char table[3][3], int player)
 {
     char c = player == 1 ? 'X' : 'O';
+    // row 1
     if (check_win_rec(table, c, 1, 0, 0) == 3)
         return 1;
-    if (check_win_rec(table, c, 2, 0, 0) == 3)
-        return 1;
-    if (check_win_rec(table, c, 3, 0, 0) == 3)
-        return 1;
+    // row 2
     if (check_win_rec(table, c, 1, 1, 0) == 3)
         return 1;
+    // row 3
     if (check_win_rec(table, c, 1, 2, 0) == 3)
         return 1;
+    // diag top left -> bottom right
+    if (check_win_rec(table, c, 2, 0, 0) == 3)
+        return 1;
+    // col 1
+    if (check_win_rec(table, c, 3, 0, 0) == 3)
+        return 1;
+    // col 2
     if (check_win_rec(table, c, 3, 0, 1) == 3)
         return 1;
-    if (check_win_rec(table, c, 3, 0, 1) == 3)
+    // col 3
+    if (check_win_rec(table, c, 3, 0, 2) == 3)
         return 1;
-    if (check_win_rec(table, c, 4, 0, 1) == 3)
+    // diag bottom left -> top right
+    if (check_win_rec(table, c, 4, 2, 0) == 3)
         return 1;
     return 0;
 }
